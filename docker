@@ -1,0 +1,33 @@
+Docker-1
+
+1.create container
+---docker run -it --name ngname2 -p 9898:80 nginx:latest /bin/bash
+---------------------give name of service----------------port name add------------service
+cd /usr/share/nginx/html
+service nginx start
+---ubuntu docker run -it --name ngname2 -p 8080:80 ubuntu:latest /bin/bash
+apt update -y
+apt install apache2 -y
+cd /var/www/html
+echo file index.html
+service apache start
+
+2.create image of container
+docker commit ngname2 ngname3
+
+3.to see docker images- docker images
+4.to see docker container- docker ps
+
+5.go to container- docker attach (container name)
+6. go out of container - ctrl+p ctrl +q
+
+7.volume
+-docker volume create my-volume
+-docker run -it --name nginx-2 -p 8081:80 -v my-volume:/usr/share/nginx/html nginx:latest /bin/bash
+cd usr/share/nginx/html
+ls -la
+echo 
+ls -la
+
+8.container kill
+docker kill web
