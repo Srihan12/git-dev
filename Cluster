@@ -1,0 +1,71 @@
+cd .ssh/
+    5  ll
+    6  cd
+    7  eksctl create nodegroup   --cluster my-cluster   --region ap-south-1   --name my-node-group   --node-ami-family Ubuntu2004   --node-type t2.small   --subnet-ids subnet-04c35badd345f4946,subnet-001f9ecd7c713e035   --nodes 3   --nodes-min 2   --nodes-max 4   --ssh-access   --ssh-public-key /root/.ssh/id_rsa.pub
+    8  eksctl delete cluster --region=ap-south-1 --name=my-cluster
+    9  eksctl create cluster --name my-cluster22 --region ap-south-1 --version 1.29 --vpc-public-subnets subnet-03fae92a1dfbdd690,subnet-001f9ecd7c713e035 --without-nodegroup
+   10  eksctl create nodegroup   --cluster my-cluster   --region ap-south-1   --name my-node-group   --node-ami-family Ubuntu2004   --node-type t2.small   --subnet-ids subnet-03fae92a1dfbdd690,subnet-001f9ecd7c713e035   --nodes 3   --nodes-min 2   --nodes-max 4   --ssh-access   --ssh-public-key /root/.ssh/id_rsa.pub
+   11  eksctl create nodegroup   --cluster my-cluster22   --region ap-south-1   --name my-node-group   --node-ami-family Ubuntu2004   --node-type t2.small   --subnet-ids subnet-03fae92a1dfbdd690,subnet-001f9ecd7c713e035   --nodes 3   --nodes-min 2   --nodes-max 4   --ssh-access   --ssh-public-key /root/.ssh/id_rsa.pub
+   12  mkdir /pods
+   13  cd /pods
+   14  vim pod-1.yaml
+   15  kubectl apply -f pod-1.yaml
+   16  kubectl get pod
+   17  kubectl get pod -o wide
+   18  kubectl describe pod srihan-app
+   19  kubectl get rs
+   20  vim my-replicaset.yaml
+   21  kubectl apply -f my-replicaset.yaml
+   22  vim my-replicaset.yaml
+   23  kubectl apply -f my-replicaset.yaml
+   24  vim my-replicaset.yaml
+   25  kubectl apply -f my-replicaset.yaml
+   26  vim my-replicaset.yaml
+   27  kubectl get rs
+   28  vim my-replicaset.yaml
+   29  kubectl get pids
+   30  kubectl get pods
+   31  kubectl get rs
+   32  vim myreplicaset.yaml
+   33  vim my-replicaset.yaml
+   34  kubectl get rs
+   35  kubectl apply -f my-replicaset.yaml
+   36  kubectl get rs
+   37  kubectl autoscale rs web-host --max=10 --min=3
+   38  kubectl get rs
+   39  kubectl scale rs web-host --replicas=3
+   40  clear
+   41  kubectl get clusters
+   42  eksctl version
+   43  kubectl version --client
+   44  kubectl config get-clusters [flags]
+   45  kubectl config get-clusters
+   46  help for get-clusters
+   47  kubectl get-clusters
+   48  kubectl get clusters
+   49  Kubectl config current-context
+   50  kubectl config current-context
+   51  kubectl get pods
+   52  kubectl get cluster
+   53  sshssh -i "mumbai-keyy.pem" ec2-user@ec2-13-234-118-40.ap-south-1.compute.amazonaws.com
+   54  ssh-keygen
+   55  yum install docker*
+   56  kubectl get nodes
+   57  vim deployment.yaml
+   58  kubectl apply -f deployment.yaml
+   59  kubectl get pods
+   60  kubectl get pod
+   61  kubectl get pods
+   62  vim deployment.yaml
+   63  kubectl get pods
+   64  kubectl get pod
+   65  vim deployment.yaml
+   66  kubectl delete deployment name-deployment
+   67  kubectl apply -f deployment.yaml
+   68  kubectl get pods
+   69  kubectl expose deplyoment/sri --type=LoadBalancer --port=80
+   70  kubectl expose deployment/sri --type=LoadBalancer --port=80
+   71  kubectl get svc
+   72  vim service.yaml
+   73  kubectl apply -f service.yaml
+   74  kubectl get svc
