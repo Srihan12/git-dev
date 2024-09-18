@@ -1,0 +1,33 @@
+Setup Tomcat Server
+1.yum install java*
+2.java --version
+3.cd /opt
+4.wget tar.gz file
+5.ls
+6.tar -xvzf apachetomcat.......gz
+7.ls
+8.mv apache-tomcat-9.0.93 tomcat
+9.ls
+10.cd tomcat
+11.cd bin
+12.ls
+13../startup.sh
+tomcat started
+to start manager app -
+14.find / -name context.xml
+15.vim last 2 files and comment val classname line
+cd bin shutdown then startup
+set username pass for manager app-
+16.cd conf/ - ls (tomcat-users.xml)
+17.vim tomcat-users.xml
+shift g to come at end
+add users and remove previous ones
+add-  <role rolename="manager-gui"/>
+          <role rolename="manager-script"/>
+          <role rolename="manager-jmx"/>
+          <role rolename="manager-status"/>
+  <user username="admin" password="redhat" roles="manager-gui, manager-script, manager-jmx, manager-status"/>
+  <user username="deployer" password="redhat" roles="manager-script"/>
+  <user username="tomcat" password="redhat" roles="manager-gui"/>:wq!
+18. cd ..
+19.cd bin shutdown and then startup
