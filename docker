@@ -1,3 +1,4 @@
+rsync -avh /var/lib/jenkins/workspace/tomcat-job/* root@172.31.39.233:/opt
 Docker-1
 
 1.create container
