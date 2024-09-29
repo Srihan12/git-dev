@@ -321,7 +321,7 @@ cd /etc/passwd
 u will get thor user in it
 
 2)security -http
-cat index.html
+vim index.html
 helloo
 vim configure.yaml
 configure apache server
@@ -336,7 +336,7 @@ configure apache server
                     state: latest
             - name: copy index.html file
               copy:
-                    src: index.html
+                    src: /etc/ansible/index.html
                     dest: /var/www/html/index.html
             - name: started apache
               systemd:
@@ -413,7 +413,13 @@ vim configure-apache.yml
 cd httpd/conf
 cp httpd.conf /etc/ansible
 
-
+if firewalld not installed in host install-
+yum install firewalld or
+tasks:
+    - name: Install firewalld
+      ansible.builtin.package:
+        name: firewalld
+        state: present
 go in host
 systemctl status httpd  
 it will show available
