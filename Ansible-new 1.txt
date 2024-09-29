@@ -1,6 +1,4 @@
-
- 
-Ansible setup
+ Ansible setup
  
 1.  t2.micro in same region
 2 intstance  
@@ -23,8 +21,6 @@ save and exit
  
 key based authentication - to manage lot of machines passwd based auth is not possible
 
- 
- 
 in host machine 
 #
 vim /etc/ssh/sshd_config
@@ -423,9 +419,31 @@ tasks:
 go in host
 systemctl status httpd  
 it will show available
+__________________________________________________________________________________________________
+copy fstab file
+vim fstab.yaml
 
 
-
+---
+- name: configure apache with handler
+  hosts: all
+  tasks:
+    - name: install httpd
+      dnf:
+        name: httpd
+        state: latest
+ 
+    - name: copy fstab file
+      copy:
+        src: /etc/fstab
+        dest: /tmp
+ 
+    - name: started apache
+      systemd:
+        name: httpd
+        state: started
+        enabled: true
+     
 
 
 
