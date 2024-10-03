@@ -1,0 +1,150 @@
+resource "aws_vpc" "test-vpc" {
+  cidr_block = "10.0.0.0/16"
+}
+
+
+resource "aws_security_group" "test_access" {
+  name        = "test_access"
+  vpc_id      = aws_vpc.test-vpc.id
+  description = "allow ssh and http"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
+}
+
+resource "aws_internet_gateway" "test-igw" {
+  vpc_id = aws_vpc.test-vpc.id
+
+  tags = {
+    Name = "test-igw"
+  }
+}
+
+#public subnet
+
+resource "aws_subnet" "public-subnet" {
+  vpc_id            = aws_vpc.test-vpc.id
+  availability_zone = "ap-south-1a"
+  cidr_block        = "10.0.0.0/24"
+
+  tags = {
+    Name = "Public-subnet"
+  }
+}
+
+
+#private subnet
+
+resource "aws_subnet" "private-subnet" {
+  vpc_id            = aws_vpc.test-vpc.id
+  availability_zone = "ap-south-1b"
+  cidr_block        = "10.0.1.0/24"
+
+  tags = {
+    Name = "Private-subnet" #security group
+  }
+}
+
+#public route table
+resource "aws_route_table" "public-rt" {
+  vpc_id = aws_vpc.test-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.test-igw.id
+  }
+
+
+  tags = {
+    Name = "public-rt"
+
+  }
+}
+
+
+#route Tatable assosication code
+resource "aws_route_table_association" "public-asso" {
+  subnet_id      = aws_subnet.public-subnet.id
+  route_table_id = aws_route_table.public-rt.id
+}
+
+
+resource "aws_eip" "nat-eip" {
+}
+### create Nat gateway
+resource "aws_nat_gateway" "my-ngw" {
+  allocation_id = aws_eip.nat-eip.id
+  subnet_id     = aws_subnet.public-subnet.id
+}
+
+
+resource "aws_route_table" "private-rt" {
+  vpc_id = aws_vpc.test-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.my-ngw.id
+  }
+
+
+  tags = {
+    Name = "private-rt"
+  }
+}
+
+
+##route Tatable assosication code
+resource "aws_route_table_association" "private-asso" {
+  subnet_id      = aws_subnet.private-subnet.id
+  route_table_id = aws_route_table.private-rt.id
+}
+
+
+resource "aws_instance" "web-server2" {
+  ami                         = "ami-08718895af4dfa033"
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.public-subnet.id
+  instance_type               = "t2.micro"
+  key_name                    = "mumbai-keyy"
+  security_groups             = [aws_security_group.test_access.id]
+  tags = {
+    Name     = "tera-instance"
+    Stage    = "testing"
+    Location = "INDIA"
+  }
+
+}
+
+resource "aws_instance" "web-server-private" {
+  ami                         = "ami-08718895af4dfa033"
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.private-subnet.id
+  instance_type               = "t2.micro"
+  key_name                    = "mumbai-keyy"
+  security_groups             = [aws_security_group.test_access.id]
+  tags = {
+    Name     = "tera-instance"
+    Stage    = "testing"
+    Location = "INDIA"
+  }
+}
