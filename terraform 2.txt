@@ -125,31 +125,43 @@ resource "aws_internet_gateway" "gw" {
 
 #security group
 resource "aws_security_group" "web_access" {
-  name        = "web_access"
-  description = "allow ssh and http"
-  vpc_id      = aws_vpc.VPC-NEW.id
+        name = "web_access"
+        description = "allow ssh and http"
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+        ingress {
+                from_port = 80
+                to_port = 80
+                protocol = "tcp"
+                cidr_blocks = ["0.0.0.0/0"]
+        }
+
+        ingress {
+                from_port = 22
+                to_port = 22
+                protocol = "tcp"
+                cidr_blocks = ["0.0.0.0/0"]
+        }
+
+        egress {
+                from_port = 0
+                to_port = 0
+                protocol = "-1"
+                cidr_blocks = ["0.0.0.0/0"]
+        }
+
+
+}
+
+resource "aws_instance" "web-server" {
+  ami           = "ami-08718895af4dfa033"
+  availability_zone = "ap-south-1a"
+  instance_type = "t2.micro"
+  security_groups = ["${aws_security_group.web_access.name}"]
+  tags = {
+    Name  = "hello-World"
+    Stage = "testing"
+    Location = "INDIA"
   }
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
 
 }
 #security group end here
