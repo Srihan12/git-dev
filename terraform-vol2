@@ -1,0 +1,52 @@
+#security group
+resource "aws_security_group" "web_ashish" {
+  name        = "web_ashish"
+  description = "allow ssh and http"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
+}
+#security group end here
+resource "aws_instance" "web-server3" {
+  ami             = "ami-08718895af4dfa033"
+  instance_type   = "t2.micro"
+  key_name        = "mumbai-keyy"
+  security_groups = ["${aws_security_group.web_ashish.name}"]
+  tags = {
+  Name = "ashish" }
+}
+#attaching ebs volume
+resource "aws_ebs_volume" "vol" {
+  availability_zone = "ap-south-1a"
+  size              = 5
+
+  tags = {
+    Name = "terra-vol"
+  }
+}
+
+resource "aws_volume_attachment" "ebs_att" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.vol.id
+  instance_id = aws_instance.web-server.id
+}
